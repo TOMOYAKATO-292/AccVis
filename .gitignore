@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.Python
+env/
+venv/
+
+.streamlit/secrets.toml
+
+# ユーザー投稿データを除外
+data/requests/*.csv
+data/requests/images/*.jpg
+data/requests/images/*.png
+!data/requests/.gitkeep
+!data/requests/images/.gitkeep
+
+.vscode/
+.idea/

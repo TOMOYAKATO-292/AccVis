@@ -1,0 +1,165 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "accident_id": "A0001",
+        "timestamp": "2024-01-15T08:32:00",
+        "weather": "晴れ",
+        "accident_type": "追突",
+        "prefecture": "東京都",
+        "city": "新宿区",
+        "road_type": "国道"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [139.703549, 35.693825]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "accident_id": "A0002",
+        "timestamp": "2024-02-03T18:10:00",
+        "weather": "雨",
+        "accident_type": "出会い頭",
+        "prefecture": "神奈川県",
+        "city": "横浜市西区",
+        "road_type": "県道"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [139.622704, 35.466188]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "accident_id": "A0003",
+        "timestamp": "2023-12-22T07:45:00",
+        "weather": "雪",
+        "accident_type": "スリップ事故",
+        "prefecture": "北海道",
+        "city": "札幌市中央区",
+        "road_type": "市道"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [141.354474, 43.061936]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "accident_id": "A0004",
+        "timestamp": "2024-03-10T14:22:00",
+        "weather": "曇り",
+        "accident_type": "歩行者事故",
+        "prefecture": "大阪府",
+        "city": "大阪市北区",
+        "road_type": "国道"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [135.500254, 34.705249]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "accident_id": "A0005",
+        "timestamp": "2024-04-05T22:05:00",
+        "weather": "雨",
+        "accident_type": "右折事故",
+        "prefecture": "愛知県",
+        "city": "名古屋市中区",
+        "road_type": "県道"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [136.906564, 35.181446]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "accident_id": "A0006",
+        "timestamp": "2024-05-18T10:40:00",
+        "weather": "晴れ",
+        "accident_type": "自転車事故",
+        "prefecture": "福岡県",
+        "city": "福岡市博多区",
+        "road_type": "市道"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [130.401689, 33.589915]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "accident_id": "A0007",
+        "timestamp": "2024-06-02T16:55:00",
+        "weather": "その他",
+        "accident_type": "多重衝突",
+        "prefecture": "千葉県",
+        "city": "千葉市中央区",
+        "road_type": "国道"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [140.123308, 35.607407]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "accident_id": "A0008",
+        "timestamp": "2024-07-12T05:28:00",
+        "weather": "晴れ",
+        "accident_type": "追突",
+        "prefecture": "広島県",
+        "city": "広島市中区",
+        "road_type": "市道"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [132.455292, 34.385203]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "accident_id": "A0009",
+        "timestamp": "2024-08-20T19:15:00",
+        "weather": "雨",
+        "accident_type": "自動二輪事故",
+        "prefecture": "京都府",
+        "city": "京都市下京区",
+        "road_type": "国道"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [135.758766, 34.995170]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "accident_id": "A0010",
+        "timestamp": "2024-09-30T11:05:00",
+        "weather": "晴れ",
+        "accident_type": "歩行者事故",
+        "prefecture": "宮城県",
+        "city": "仙台市青葉区",
+        "road_type": "県道"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [140.872100, 38.268215]
+      }
+    }
+  ]
+}
