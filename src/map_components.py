@@ -38,6 +38,33 @@ def create_heatmap_layer(df: pd.DataFrame) -> pdk.Layer:
     )
 
 
+def create_scatterplot_layer(df: pd.DataFrame) -> pdk.Layer:
+    """ScatterplotLayerを作成（クリック可能な個別ポイント）
+
+    Args:
+        df: 事故データ（全カラムを含む）
+
+    Returns:
+        pdk.Layer: Pydeck ScatterplotLayer
+    """
+    # データを準備（ツールチップ表示用に全カラムを保持）
+    data = df.copy()
+
+    # 日時を文字列に変換
+    if 'OCCURRENCE_DATE_AND_TIME' in data.columns:
+        data['datetime_str'] = data['OCCURRENCE_DATE_AND_TIME'].dt.strftime('%Y年%m月%d日 %H:%M')
+
+    return pdk.Layer(
+        'ScatterplotLayer',
+        data=data,
+        get_position=['LONGITUDE', 'LATITUDE'],
+        get_radius=100,  # メートル単位
+        get_fill_color=[255, 0, 0, 100],  # 赤色、半透明
+        pickable=True,  # クリック可能
+        auto_highlight=True
+    )
+
+
 def create_initial_view_state(center_lat: float, center_lon: float, zoom: int) -> pdk.ViewState:
     """ViewStateを作成
 
@@ -71,13 +98,24 @@ def render_map(df: pd.DataFrame, center_lat: float, center_lon: float, zoom: int
         pdk.Deck: Pydeckマップ
     """
     heatmap_layer = create_heatmap_layer(df)
+    scatterplot_layer = create_scatterplot_layer(df)
     view_state = create_initial_view_state(center_lat, center_lon, zoom)
 
     return pdk.Deck(
-        layers=[heatmap_layer],
+        layers=[heatmap_layer, scatterplot_layer],
         initial_view_state=view_state,
-        map_style='mapbox://styles/mapbox/light-v10',
+        map_style='https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
         tooltip={
-            'text': '事故多発地点'
+            'html': '<b>発生日時:</b> {datetime_str}<br/>'
+                   '<b>場所:</b> {LOCATION}<br/>'
+                   '<b>事故種別:</b> {ACCIDENT_TYPE_(CATEGORY)}<br/>'
+                   '<b>天候:</b> {WEATHER}<br/>'
+                   '<b>道路種別:</b> {ROAD_TYPE}',
+            'style': {
+                'backgroundColor': 'steelblue',
+                'color': 'white',
+                'padding': '10px',
+                'borderRadius': '5px'
+            }
         }
     )
