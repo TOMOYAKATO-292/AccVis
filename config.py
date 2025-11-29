@@ -27,3 +27,15 @@ ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png']
 HEATMAP_RADIUS_PIXELS = 60
 HEATMAP_INTENSITY = 1
 HEATMAP_THRESHOLD = 0.05
+
+# 統計設定
+TOP_N_STATISTICS = 5
+TIME_PERIODS = {
+    "深夜 (0-6時)": (0, 6),
+    "朝 (6-12時)": (6, 12),
+    "昼 (12-18時)": (12, 18),
+    "夜 (18-24時)": (18, 24)
+}
+
+# 統計データファイル
+STATISTICS_DATA_FILE = ACCIDENT_DATA_DIR / "statistics.csv"

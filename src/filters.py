@@ -9,7 +9,8 @@ def apply_filters(
     month: Optional[int] = None,
     hour_range: Optional[Tuple[int, int]] = None,
     accident_types: Optional[List[str]] = None,
-    weather_conditions: Optional[List[str]] = None
+    weather_conditions: Optional[List[str]] = None,
+    areas: Optional[List[str]] = None
 ) -> pd.DataFrame:
     """事故データにフィルタを適用
 
@@ -20,6 +21,7 @@ def apply_filters(
         hour_range: 時間帯範囲 (start_hour, end_hour)、例: (0, 6)
         accident_types: フィルタする事故種類のリスト（Noneまたは空の場合は全種類）
         weather_conditions: フィルタする天候のリスト（Noneまたは空の場合は全天候）
+        areas: フィルタする市区町村のリスト（Noneまたは空の場合は全地域）
 
     Returns:
         pd.DataFrame: フィルタ後の事故データ
@@ -50,6 +52,10 @@ def apply_filters(
     if weather_conditions and len(weather_conditions) > 0:
         filtered_df = filtered_df[filtered_df['WEATHER'].isin(weather_conditions)]
 
+    # 市区町村フィルタ
+    if areas and len(areas) > 0:
+        filtered_df = filtered_df[filtered_df['Area'].isin(areas)]
+
     return filtered_df
 
 
@@ -65,10 +71,12 @@ def extract_filter_options(df: pd.DataFrame) -> Dict[str, List]:
             - months: 月のリスト（1-12）
             - accident_types: 事故種類のリスト
             - weather: 天候のリスト
+            - areas: 市区町村のリスト
     """
     return {
         'years': sorted(df['OCCURRENCE_DATE_AND_TIME'].dt.year.unique().tolist()),
         'months': list(range(1, 13)),
         'accident_types': sorted(df['ACCIDENT_TYPE_(CATEGORY)'].dropna().unique().tolist()),
-        'weather': sorted(df['WEATHER'].dropna().unique().tolist())
+        'weather': sorted(df['WEATHER'].dropna().unique().tolist()),
+        'areas': sorted(df['Area'].dropna().unique().tolist())
     }
