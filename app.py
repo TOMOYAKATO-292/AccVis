@@ -38,7 +38,7 @@ def render_sidebar(accident_data):
     Returns:
         pd.DataFrame: フィルタ後の事故データ
     """
-    st.sidebar.title("🎛️ コントロールパネル")
+    st.sidebar.title("コントロールパネル")
 
     # --- 位置指定セクション ---
     st.sidebar.header("📍 地図中心位置")
@@ -243,7 +243,7 @@ def render_statistics(accident_data):
     Args:
         accident_data: 全事故データ
     """
-    st.header("📊 TOP5 統計情報")
+    st.header("TOP5 統計情報")
 
     # フィルタオプション抽出
     filter_options = extract_filter_options(accident_data)
@@ -329,7 +329,7 @@ def render_statistics(accident_data):
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.subheader("🏙️ 事故の多い市区町村")
+        st.subheader("事故の多い市区町村")
         if len(stats['municipalities']) > 0:
             st.dataframe(
                 stats['municipalities'],
@@ -340,7 +340,7 @@ def render_statistics(accident_data):
             st.info("データがありません")
 
     with col2:
-        st.subheader("🚗 事故種類")
+        st.subheader("事故種類")
         if len(stats['accident_types']) > 0:
             st.dataframe(
                 stats['accident_types'],
@@ -351,7 +351,7 @@ def render_statistics(accident_data):
             st.info("データがありません")
 
     with col3:
-        st.subheader("🕐 時間帯")
+        st.subheader("時間帯")
         if len(stats['time_periods']) > 0:
             st.dataframe(
                 stats['time_periods'],
@@ -368,7 +368,7 @@ def main():
     initialize_session_state()
 
     # タイトル
-    st.title("🗺️ 交通事故ヒートマップ可視化システム")
+    st.title("交通事故ヒートマップ可視化システム")
     st.markdown("""
     このシステムは、地方住民が事故多発箇所を把握し、危険な道路を避けるための判断材料を提供します。
     """)
