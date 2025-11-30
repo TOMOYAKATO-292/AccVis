@@ -38,7 +38,7 @@ def render_sidebar(accident_data):
     # タイトル削除: st.sidebar.title("コントロールパネル") は削除
 
     # --- 位置指定セクション ---
-    st.sidebar.markdown('<p class="sidebar-header">📍 地図中心位置</p>', unsafe_allow_html=True)
+    st.sidebar.markdown('<p class="sidebar-header"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-right: 6px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>地図中心位置</p>', unsafe_allow_html=True)
 
     col1, col2 = st.sidebar.columns(2)
     with col1:
@@ -58,7 +58,7 @@ def render_sidebar(accident_data):
             format="%.6f"
         )
 
-    if st.sidebar.button("🎯 移動", use_container_width=True):
+    if st.sidebar.button("移動", use_container_width=True):
         is_valid, error_msg = validate_coordinates(input_lat, input_lon)
         if is_valid:
             st.session_state.center_lat = input_lat
@@ -74,7 +74,7 @@ def render_sidebar(accident_data):
     filter_options = extract_filter_options(accident_data)
 
     # --- フィルタセクション ---
-    st.sidebar.markdown('<p class="sidebar-header">🔍 データフィルタ</p>', unsafe_allow_html=True)
+    st.sidebar.markdown('<p class="sidebar-header"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-right: 6px;"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>データフィルタ</p>', unsafe_allow_html=True)
 
     # 年フィルタ
     year_filter = st.sidebar.selectbox(
@@ -137,7 +137,7 @@ def render_sidebar(accident_data):
     )
 
     # フィルタリセット
-    if st.sidebar.button("🔄 リセット", use_container_width=True):
+    if st.sidebar.button("リセット", use_container_width=True):
         st.rerun()
 
     # 統計情報
@@ -153,7 +153,7 @@ def render_sidebar(accident_data):
 
 def render_request_form():
     """要望投稿フォーム"""
-    st.markdown('<h2 class="main-title">📝 危険地点の報告</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="main-title"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-right: 8px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>危険地点の報告</h2>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">事故が多い、または危険だと感じる地点を報告してください。</p>', unsafe_allow_html=True)
 
     with st.container():
@@ -221,15 +221,15 @@ def render_request_form():
 
 def render_statistics(accident_data, filtered_data):
     """統計情報セクションを描画"""
-    st.markdown('<h2 class="main-title">📊 事故統計ダッシュボード</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="main-title"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-right: 8px;"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>事故統計ダッシュボード</h2>', unsafe_allow_html=True)
     
     # Key Metrics Row
     col1, col2, col3, col4 = st.columns(4)
     
-    def render_metric_card(label, value, icon="📊"):
+    def render_metric_card(label, value, icon_svg=""):
         st.markdown(f"""
         <div class="css-metric-card">
-            <div class="metric-icon">{icon}</div>
+            <div class="metric-icon">{icon_svg}</div>
             <div>
                 <div class="metric-label">{label}</div>
                 <div class="metric-value">{value}</div>
@@ -237,23 +237,29 @@ def render_statistics(accident_data, filtered_data):
         </div>
         """, unsafe_allow_html=True)
 
+    # SVG Icons
+    file_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>'
+    percent_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>'
+    map_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>'
+    alert_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>'
+
     with col1:
-        render_metric_card("表示件数", f"{len(filtered_data):,}", "📝")
+        render_metric_card("表示件数", f"{len(filtered_data):,}", file_icon)
     with col2:
         ratio = (len(filtered_data) / len(accident_data)) * 100
-        render_metric_card("表示率", f"{ratio:.1f}%", "📉")
+        render_metric_card("表示率", f"{ratio:.1f}%", percent_icon)
     with col3:
         if 'Area' in filtered_data.columns and not filtered_data.empty:
             top_area = filtered_data['Area'].mode().iloc[0]
-            render_metric_card("最多事故エリア", top_area, "📍")
+            render_metric_card("最多事故エリア", top_area, map_icon)
         else:
-            render_metric_card("最多事故エリア", "-", "📍")
+            render_metric_card("最多事故エリア", "-", map_icon)
     with col4:
         if 'ACCIDENT_TYPE_(CATEGORY)' in filtered_data.columns and not filtered_data.empty:
             top_type = filtered_data['ACCIDENT_TYPE_(CATEGORY)'].mode().iloc[0]
-            render_metric_card("最多事故種別", top_type, "⚠️")
+            render_metric_card("最多事故種別", top_type, alert_icon)
         else:
-            render_metric_card("最多事故種別", "-", "⚠️")
+            render_metric_card("最多事故種別", "-", alert_icon)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -267,7 +273,7 @@ def render_statistics(accident_data, filtered_data):
             city_counts = filtered_data['Area'].value_counts().head(10).reset_index()
             city_counts.columns = ['市区町村', '件数']
             
-            tab_chart, tab_data = st.tabs(["📊 グラフ", "📄 データ"])
+            tab_chart, tab_data = st.tabs(["グラフ", "データ"])
             with tab_chart:
                 chart = alt.Chart(city_counts).mark_bar().encode(
                     x=alt.X('件数', title=None),
@@ -289,7 +295,7 @@ def render_statistics(accident_data, filtered_data):
             type_counts = filtered_data['ACCIDENT_TYPE_(CATEGORY)'].value_counts().reset_index()
             type_counts.columns = ['事故類型', '件数']
             
-            tab_chart, tab_data = st.tabs(["📊 グラフ", "📄 データ"])
+            tab_chart, tab_data = st.tabs(["グラフ", "データ"])
             with tab_chart:
                 chart = alt.Chart(type_counts).mark_arc(innerRadius=50).encode(
                     theta=alt.Theta(field="件数", type="quantitative"),
@@ -312,7 +318,7 @@ def render_statistics(accident_data, filtered_data):
         hour_counts = hours.value_counts().sort_index().reset_index()
         hour_counts.columns = ['時間', '件数']
         
-        tab_chart, tab_data = st.tabs(["📊 グラフ", "📄 データ"])
+        tab_chart, tab_data = st.tabs(["グラフ", "データ"])
         with tab_chart:
             chart = alt.Chart(hour_counts).mark_area(
                 line={'color':'#1A73E8'},
@@ -352,7 +358,7 @@ def main():
         selected = option_menu(
             menu_title=None,
             options=["マップ & フィルタ", "ダッシュボード", "危険地点の報告"],
-            icons=["map", "bar-chart", "exclamation-triangle"],
+            icons=["geo-alt", "bar-chart-line", "exclamation-circle"],
             menu_icon="cast",
             default_index=0,
             orientation="horizontal",
@@ -389,7 +395,7 @@ def main():
 
     # コンテンツ表示
     if selected == "マップ & フィルタ":
-        st.markdown('<h2 class="main-title">📍 事故ヒートマップ</h2>', unsafe_allow_html=True)
+        st.markdown('<h2 class="main-title"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-right: 8px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>事故ヒートマップ</h2>', unsafe_allow_html=True)
         st.markdown('<p class="subtitle">地図を操作して事故多発地点を確認できます。</p>', unsafe_allow_html=True)
         
         try:
