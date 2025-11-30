@@ -38,6 +38,8 @@ def create_heatmap_layer(df: pd.DataFrame) -> pdk.Layer:
     )
 
 
+
+
 def create_scatterplot_layer(df: pd.DataFrame) -> pdk.Layer:
     """ScatterplotLayerを作成（クリック可能な個別ポイント）
 
