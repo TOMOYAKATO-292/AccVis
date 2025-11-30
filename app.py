@@ -225,23 +225,35 @@ def render_statistics(accident_data, filtered_data):
     
     # Key Metrics Row
     col1, col2, col3, col4 = st.columns(4)
+    
+    def render_metric_card(label, value, icon="📊"):
+        st.markdown(f"""
+        <div class="css-metric-card">
+            <div class="metric-icon">{icon}</div>
+            <div>
+                <div class="metric-label">{label}</div>
+                <div class="metric-value">{value}</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
     with col1:
-        st.metric("表示件数", f"{len(filtered_data):,}")
+        render_metric_card("表示件数", f"{len(filtered_data):,}", "📝")
     with col2:
         ratio = (len(filtered_data) / len(accident_data)) * 100
-        st.metric("表示率", f"{ratio:.1f}%")
+        render_metric_card("表示率", f"{ratio:.1f}%", "📉")
     with col3:
         if 'Area' in filtered_data.columns and not filtered_data.empty:
             top_area = filtered_data['Area'].mode().iloc[0]
-            st.metric("最多事故エリア", top_area)
+            render_metric_card("最多事故エリア", top_area, "📍")
         else:
-            st.metric("最多事故エリア", "-")
+            render_metric_card("最多事故エリア", "-", "📍")
     with col4:
         if 'ACCIDENT_TYPE_(CATEGORY)' in filtered_data.columns and not filtered_data.empty:
             top_type = filtered_data['ACCIDENT_TYPE_(CATEGORY)'].mode().iloc[0]
-            st.metric("最多事故種別", top_type)
+            render_metric_card("最多事故種別", top_type, "⚠️")
         else:
-            st.metric("最多事故種別", "-")
+            render_metric_card("最多事故種別", "-", "⚠️")
 
     st.markdown("<br>", unsafe_allow_html=True)
 

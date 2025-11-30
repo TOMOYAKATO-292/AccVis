@@ -13,9 +13,9 @@ def get_google_cloud_css():
             background-color: #F8F9FA;
         }
 
-        /* Hide default Streamlit header decoration */
-        header {
-            visibility: hidden;
+        /* Header Styling */
+        header[data-testid="stHeader"] {
+            background-color: transparent;
         }
         
         /* Custom Title Styling */
@@ -34,11 +34,64 @@ def get_google_cloud_css():
         /* Card Styling */
         .css-card {
             background-color: #FFFFFF;
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
             margin-bottom: 24px;
-            border: 1px solid #E8EAED;
+            border: 1px solid #F1F3F4;
+            transition: all 0.3s ease;
+        }
+        .css-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Metric Card Styling */
+        .css-metric-card {
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #F1F3F4;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .css-metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.08);
+            border-color: #E8F0FE;
+        }
+        
+        .metric-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #5F6368;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #202124;
+            line-height: 1.2;
+        }
+        
+        .metric-icon {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: #1A73E8;
+            background-color: #E8F0FE;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Sidebar Styling */
@@ -49,31 +102,18 @@ def get_google_cloud_css():
         
         /* Sidebar Headers */
         .sidebar-header {
-            font-size: 0.9rem;
-            font-weight: 600;
+            font-size: 0.85rem;
+            font-weight: 700;
             color: #202124;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
         }
 
-        /* Metrics */
+        /* Hide default metrics to use custom ones */
         div[data-testid="stMetric"] {
-            background-color: #FFFFFF;
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid #E8EAED;
-            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3);
-        }
-        div[data-testid="stMetricLabel"] {
-            font-size: 0.9rem;
-            color: #5F6368;
-        }
-        div[data-testid="stMetricValue"] {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #1A73E8;
+            display: none;
         }
 
         /* Buttons */
@@ -81,15 +121,15 @@ def get_google_cloud_css():
             background-color: #1A73E8;
             color: white;
             border: none;
-            border-radius: 8px;
-            font-weight: 500;
+            border-radius: 10px;
+            font-weight: 600;
             padding: 0.6rem 1.2rem;
-            box-shadow: 0 1px 2px rgba(60,64,67,0.3);
+            box-shadow: 0 2px 4px rgba(26, 115, 232, 0.2);
             transition: all 0.2s;
         }
         div.stButton > button[kind="primary"]:hover {
             background-color: #1765CC;
-            box-shadow: 0 2px 4px rgba(60,64,67,0.3);
+            box-shadow: 0 4px 8px rgba(26, 115, 232, 0.3);
             transform: translateY(-1px);
         }
         
@@ -97,23 +137,27 @@ def get_google_cloud_css():
             background-color: white;
             color: #3C4043;
             border: 1px solid #DADCE0;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 500;
+        }
+        div.stButton > button[kind="secondary"]:hover {
+            background-color: #F8F9FA;
+            border-color: #3C4043;
         }
 
         /* Dataframes */
         div[data-testid="stDataFrame"] {
             border: 1px solid #E8EAED;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
         }
 
         /* Custom Classes for injection */
         .dashboard-card-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 600;
             color: #202124;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
         
     </style>
