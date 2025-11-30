@@ -12,6 +12,7 @@ REQUESTS_IMAGES_DIR = REQUESTS_DATA_DIR / "images"
 
 # データファイル
 ACCIDENT_DATA_FILE = ACCIDENT_DATA_DIR / "data.csv"
+PREDICTED_DATA_FILE = ACCIDENT_DATA_DIR / "predicted_locations_score.csv"
 REQUESTS_CSV_FILE = REQUESTS_DATA_DIR / "requests.csv"
 
 # アプリケーション設定

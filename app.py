@@ -4,7 +4,7 @@ from streamlit_option_menu import option_menu
 import pandas as pd
 import altair as alt
 from config import DEFAULT_CENTER_LAT, DEFAULT_CENTER_LON, DEFAULT_ZOOM
-from src.data_loader import load_accident_data
+from src.data_loader import load_accident_data, load_predicted_data
 from src.map_components import render_map
 from src.filters import apply_filters, extract_filter_options
 from src.utils import validate_coordinates
@@ -140,6 +140,20 @@ def render_sidebar(accident_data):
     if st.sidebar.button("リセット", use_container_width=True):
         st.rerun()
 
+    st.sidebar.divider()
+
+    # 表示データ切り替え
+    data_view_mode = st.sidebar.radio(
+        "表示データ",
+        options=[
+            ("all", "実績 + 予測"),
+            ("actual", "実績のみ"),
+            ("predicted", "予測のみ"),
+        ],
+        format_func=lambda x: x[1],
+        index=0
+    )[0]
+
     # 統計情報
     st.sidebar.markdown(f"""
     <div style="margin-top: 20px; padding: 10px; background-color: #E8F0FE; border-radius: 8px; color: #1967D2; font-size: 0.9rem; text-align: center;">
@@ -148,7 +162,7 @@ def render_sidebar(accident_data):
     </div>
     """, unsafe_allow_html=True)
 
-    return filtered_data
+    return filtered_data, data_view_mode
 
 
 def render_request_form():
@@ -349,6 +363,7 @@ def main():
     # データ読み込み
     try:
         accident_data = load_accident_data()
+        predicted_data = load_predicted_data()
     except Exception as e:
         st.error(f"データの読み込みに失敗しました: {str(e)}")
         return
@@ -387,8 +402,9 @@ def main():
 
     # サイドバー（共通）
     filtered_data = accident_data
+    data_view_mode = "all"
     if selected in ["マップ & フィルタ", "ダッシュボード"]:
-        filtered_data = render_sidebar(accident_data)
+        filtered_data, data_view_mode = render_sidebar(accident_data)
     else:
         with st.sidebar:
             st.info("危険地点の報告ページです。地図上の位置を指定して報告してください。")
@@ -397,13 +413,30 @@ def main():
     if selected == "マップ & フィルタ":
         st.markdown('<h2 class="main-title"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline; vertical-align: middle; margin-right: 8px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>事故ヒートマップ</h2>', unsafe_allow_html=True)
         st.markdown('<p class="subtitle">地図を操作して事故多発地点を確認できます。</p>', unsafe_allow_html=True)
+        st.markdown(
+            """
+            <div style="display:flex; gap:16px; align-items:center; margin: 4px 0 12px 0;">
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span style="width:12px; height:12px; border-radius:50%; background: rgba(223,59,48,0.7); display:inline-block;"></span>
+                <span style="font-size:0.9rem; color:#444;">実績</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span style="width:12px; height:12px; border-radius:50%; background: rgba(66,133,244,0.8); display:inline-block;"></span>
+                <span style="font-size:0.9rem; color:#444;">予測</span>
+              </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
         
         try:
             deck = render_map(
                 filtered_data,
+                predicted_data,
                 st.session_state.center_lat,
                 st.session_state.center_lon,
-                st.session_state.zoom
+                st.session_state.zoom,
+                data_view_mode
             )
             st.pydeck_chart(deck)
         except Exception as e:

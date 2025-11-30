@@ -1,7 +1,7 @@
 """データ読み込み・キャッシング"""
 import pandas as pd
 import streamlit as st
-from config import ACCIDENT_DATA_FILE
+from config import ACCIDENT_DATA_FILE, PREDICTED_DATA_FILE
 
 
 @st.cache_data
@@ -26,5 +26,30 @@ def load_accident_data() -> pd.DataFrame:
 
     # 緯度経度が欠損している行も除外
     df = df.dropna(subset=['LATITUDE', 'LONGITUDE'])
+
+    return df
+
+
+@st.cache_data
+def load_predicted_data() -> pd.DataFrame:
+    """予測された事故位置データを読み込み
+
+    Returns:
+        pd.DataFrame: 予測データ（PREDICTED_LATITUDE/LONGITUDE/IMPACTを含む）
+    """
+    df = pd.read_csv(PREDICTED_DATA_FILE, on_bad_lines='skip', encoding='utf-8')
+
+    # 位置カラムを統一
+    df = df.rename(columns={
+        'PREDICTED_LATITUDE': 'LATITUDE',
+        'PREDICTED_LONGITUDE': 'LONGITUDE'
+    })
+
+    # ツールチップ用の補助カラム
+    df['OCCURRENCE_DATE_AND_TIME'] = pd.NaT
+    df['LOCATION'] = df['LOCATION'] if 'LOCATION' in df.columns else '予測地点'
+    df['ROAD_TYPE'] = df['ROAD_TYPE'] if 'ROAD_TYPE' in df.columns else '-'
+    df['datetime_str'] = '予測データ'
+    df['source_label'] = '予測'
 
     return df
