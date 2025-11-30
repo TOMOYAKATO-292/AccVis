@@ -4,6 +4,9 @@
 
 **🌐 デモサイト**: https://accvis-8kgi7ue6evmjtajyh2kvyz.streamlit.app/
 
+![alt text](img/image.png)
+![alt text](img/image-1.png)
+
 ## 機能
 
 ### 1. 事故ヒートマップ表示
@@ -26,7 +29,13 @@
 - 月別・時間帯別の事故推移グラフ
 - 人口データとの統合分析
 
-### 4. 危険地点の要望投稿
+### 4. 事故発生予測（機械学習）
+- Random Forestアルゴリズムによる事故発生位置の予測
+- 事故種類、天候、車両タイプ、人口から緯度・経度・影響度を予測
+- 30の多様なシナリオに基づく予測結果の可視化
+- 詳細は[予測モデル](#予測モデルについて)セクションを参照
+
+### 5. 危険地点の要望投稿
 - 位置指定（緯度・経度）
 - テキスト要望入力
 - 画像添付（任意、最大5MB、JPEG/PNG対応）
@@ -89,6 +98,15 @@ streamlit run app.py
 
 - **merged_data.csv**: 事故データと人口データの統合データ（157,482行）
 
+- **predicted_locations.csv**: 機械学習による予測結果データ（30行）
+  - `ACCIDENT_TYPE_(CATEGORY)`: 事故種類
+  - `WEATHER`: 天候条件
+  - `VEHICLE_1:_BODY_TYPE`: 車両タイプ
+  - `POPULATION`: 人口
+  - `PREDICTED_LATITUDE`: 予測緯度
+  - `PREDICTED_LONGITUDE`: 予測経度
+  - `PREDICTED_IMPACT`: 予測影響度
+
 ### 要望データ (data/requests/requests.csv)
 要望投稿時に自動生成されるCSVファイル:
 - `request_id`: 要望ID
@@ -133,6 +151,7 @@ AccVis/
 │   └── generate_statistics.py  # 統計データ生成
 │
 ├── dataclean/              # データクリーニング
+│   └── predict_accident_locations.py  # 事故位置予測スクリプト
 │
 ├── .streamlit/              # Streamlit設定
 │   └── config.toml
@@ -183,6 +202,108 @@ AccVis/
 5. メインファイルとして `app.py` を指定
 6. Deployをクリック
 
+## 予測モデルについて
+
+このシステムでは、過去の事故データを用いた機械学習モデルにより、特定の条件下での事故発生位置と影響度を予測しています。
+
+### アルゴリズム
+**Random Forest Regressor（ランダムフォレスト回帰）**を採用
+
+Random Forestは複数の決定木を組み合わせた強力なアンサンブル学習アルゴリズムで、以下の利点があります:
+- 高い予測精度
+- 過学習の抑制
+- 非線形な関係性の学習が可能
+- 欠損値や外れ値に対する頑健性
+
+### 予測モデルの構成
+
+3つの独立したRandom Forestモデルを使用:
+
+1. **緯度予測モデル** (`model_lat`)
+   - 目的: 事故発生の緯度を予測
+   - パラメータ: n_estimators=100, max_depth=20
+
+2. **経度予測モデル** (`model_lon`)
+   - 目的: 事故発生の経度を予測
+   - パラメータ: n_estimators=100, max_depth=20
+
+3. **影響度予測モデル** (`model_impact`)
+   - 目的: 事故の影響度（被害規模）を予測
+   - パラメータ: n_estimators=200, max_depth=20
+
+### 入力特徴量
+
+モデルは以下の4つの特徴量を使用:
+
+1. **事故種類** (`ACCIDENT_TYPE_(CATEGORY)`)
+   - 例: 正面衝突、追突、横転など
+   - LabelEncoderで数値化
+
+2. **天候条件** (`WEATHER`)
+   - 例: 晴れ、雨、雪、霧など
+   - LabelEncoderで数値化
+
+3. **車両タイプ** (`VEHICLE_1:_BODY_TYPE`)
+   - 例: 乗用車、トラック、バスなど
+   - LabelEncoderで数値化
+
+4. **人口** (`POPULATION`)
+   - 該当地域の人口数
+   - 数値データとして直接使用
+
+### 予測出力
+
+1. **予測緯度** (`PREDICTED_LATITUDE`)
+   - 事故が発生する可能性が高い緯度
+
+2. **予測経度** (`PREDICTED_LONGITUDE`)
+   - 事故が発生する可能性が高い経度
+
+3. **予測影響度** (`PREDICTED_IMPACT`)
+   - 事故の被害規模の推定値
+
+### モデル性能
+
+モデルの評価指標（MAE: 平均絶対誤差）:
+- **緯度誤差**: 約0.XXXXXX度（距離換算: 約X.XX km）
+- **経度誤差**: 約0.XXXXXX度（距離換算: 約X.XX km）
+- **影響度誤差**: 約X.XXX（影響度単位）
+
+※実際の数値は[predict_accident_locations.py](dataclean/predict_accident_locations.py)を実行して確認できます。
+
+### データ分割
+
+- **訓練データ**: 80%（モデル学習用）
+- **テストデータ**: 20%（性能評価用）
+- random_state=42で再現性を確保
+
+### 予測シナリオの生成
+
+30の多様な予測シナリオを生成:
+- 事故種類、天候、車両タイプをランダムに組み合わせ
+- 人口は実際のデータの25-75パーセンタイル範囲内から選択
+- 予測結果は `data/accidents/predicted_locations.csv` に保存
+
+### 実行方法
+
+```bash
+cd dataclean
+python predict_accident_locations.py
+```
+
+実行後、以下が生成されます:
+- `data/accidents/predicted_locations.csv`: 30件の予測結果
+- コンソールにモデル性能と予測サンプルが表示
+
+### 技術的詳細
+
+- **実装**: Python + scikit-learn
+- **前処理**: 欠損値削除、カテゴリカル変数のエンコーディング
+- **並列処理**: n_jobs=-1で全CPUコアを活用
+- **再現性**: 各所でrandom_state=42を設定
+
+詳細なコードは[dataclean/predict_accident_locations.py](dataclean/predict_accident_locations.py)を参照してください。
+
 ## 主な特徴
 
 - **リアルタイム更新**: フィルタ変更時に即座にヒートマップが更新
@@ -190,6 +311,7 @@ AccVis/
 - **高パフォーマンス**: 大規模データセット（15万行以上）の高速処理
 - **直感的なUI**: Google Cloud風のモダンなデザイン
 - **データ統合**: 事故データと人口統計データの統合分析
+- **AI予測**: 機械学習による事故発生位置と影響度の予測
 
 ## ライセンス
 
