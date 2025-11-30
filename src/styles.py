@@ -1,11 +1,15 @@
 def get_google_cloud_css():
     return """
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
         html, body, [class*="css"] {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             color: #3C4043;
+        }
+        
+        code, pre, .monospace {
+            font-family: 'Space Mono', monospace;
         }
 
         /* Main Background */
